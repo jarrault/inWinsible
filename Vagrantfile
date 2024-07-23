@@ -1,6 +1,5 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "gusztavvargadr/visual-studio-2022-community-windows-10"
-  config.vm.box_version = "2202.0.2404"
   
   config.vm.define "inWinsible"
   config.vm.network "private_network", ip: "192.168.56.50"
