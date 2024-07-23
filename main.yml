@@ -1,0 +1,26 @@
+---
+- name: Set Windows Keyboard Language to French
+  hosts: all
+  tasks:
+    - name: Set Keyboard Language to French
+      win_shell: |
+        $langList = Get-WinUserLanguageList;
+        $langList.Add("fr-FR");
+        $langList.Remove("en-US");
+        Set-WinUserLanguageList -LanguageList $langList -Force
+
+    - name: Install multiple packages
+      win_chocolatey:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - firefox
+        - git
+        - vscode
+        - processhacker
+        - notepadplusplus
+        - x64dbg.portable
+        - pebear
+        - hxd
+        - procmon
+        - pestudio
