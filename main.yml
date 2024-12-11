@@ -58,6 +58,8 @@
         name: Favorites
         state: absent
 
-    - name: Reboot the system
+    - name: Reboot the machine
       win_reboot:
-        reboot_timeout: 300
+        reboot_timeout: 600
+        reboot_msg: "Rebooting the machine"
+        post_reboot_delay: 60
