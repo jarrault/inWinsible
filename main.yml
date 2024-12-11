@@ -1,5 +1,5 @@
 ---
-- name: Set Windows Keyboard Language to French
+- name: Setup inWinsible
   hosts: all
   tasks:
     - name: Set Keyboard Language to French
@@ -24,3 +24,40 @@
         - hxd
         - procmon
         - pestudio
+      retries: 3
+
+    # https://github.com/AlexNabokikh/windows-playbook
+    - name: Unpin 'Search' from Taskbar
+      ansible.windows.win_regedit:
+        path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Search
+        name: SearchboxTaskbarMode
+        data: 0
+        type: dword
+
+    - name: Unpin Task View, Chat and Cortana from Taskbar.
+      ansible.windows.win_regedit:
+        path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced
+        name: "{{ item }}"
+        data: 0
+        type: dword
+      loop:
+        - ShowCortanaButton
+        - ShowTaskViewButton
+
+    - name: Unpin 'News and Interests' from Taskbar.
+      ansible.windows.win_regedit:
+        path: HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds
+        name: EnableFeeds
+        data: 0
+        type: dword
+        state: present
+
+    - name: Unpin 'Edge', 'Store' other built-in shortcuts from Taskbar.
+      ansible.windows.win_regedit:
+        path: HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband
+        name: Favorites
+        state: absent
+
+    - name: Reboot the system
+      win_reboot:
+        reboot_timeout: 300
